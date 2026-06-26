@@ -2,79 +2,50 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>تسجيل الدخول</title>
+    <title>نظام الموظفين</title>
     <style>
-        body {
-            margin: 0;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            /* خلفية الغابة الليلية */
-            background: linear-gradient(to bottom, #4a148c, #6a1b9a, #9c27b0);
-            background-image: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=2070'); /* يمكنك استبدال الرابط بصورة غابة أرجوانية */
-            background-size: cover;
-            font-family: sans-serif;
-        }
+        body { margin: 0; height: 100vh; display: flex; justify-content: center; align-items: center; 
+               background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=2070') no-repeat center center/cover; 
+               font-family: 'Segoe UI', sans-serif; }
+        
+        .card { background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(15px); padding: 40px; 
+                border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.3); 
+                width: 350px; text-align: center; color: white; box-shadow: 0 8px 32px rgba(0,0,0,0.37); }
 
-        .login-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(15px);
-            padding: 40px;
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            width: 350px;
-            text-align: center;
-            color: white;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-        }
+        input { width: 100%; padding: 12px; margin: 10px 0; background: rgba(255,255,255,0.1); 
+                border: 1px solid rgba(255,255,255,0.2); border-radius: 25px; color: white; text-align: center; }
+        
+        button { width: 100%; padding: 12px; margin-top: 15px; background: white; border: none; 
+                 border-radius: 25px; font-weight: bold; cursor: pointer; }
 
-        h2 { margin-bottom: 25px; }
-
-        input {
-            width: 100%;
-            padding: 12px;
-            margin: 10px 0;
-            background: rgba(255, 255, 255, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 25px;
-            color: white;
-            box-sizing: border-box;
-            text-align: center;
-        }
-
-        button {
-            width: 100%;
-            padding: 12px;
-            margin-top: 20px;
-            background: white;
-            border: none;
-            border-radius: 25px;
-            font-weight: bold;
-            cursor: pointer;
-        }
+        .data-row { display: flex; justify-content: space-between; margin: 15px 0; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 5px; }
+        #dashboard { display: none; }
     </style>
 </head>
 <body>
 
-<div class="login-card" id="loginArea">
-    <h2>Login</h2>
-    <input type="text" id="user" placeholder="Username">
-    <input type="password" id="pass" placeholder="Password">
-    <button onclick="login()">Login</button>
+<!-- صفحة تسجيل الدخول -->
+<div class="card" id="loginArea">
+    <h2>تسجيل الدخول</h2>
+    <input type="text" id="user" placeholder="اسم المستخدم">
+    <input type="password" id="pass" placeholder="كلمة المرور">
+    <button onclick="login()">دخول</button>
 </div>
 
-<!-- هنا ستوضع لوحة التحكم بعد نجاح الدخول -->
-<div id="dashboard" class="login-card" style="display:none;">
-    <h2>Welcome Back!</h2>
-    <p id="resName"></p>
-    <button onclick="location.reload()">Logout</button>
+<!-- لوحة البيانات -->
+<div id="dashboard" class="card">
+    <h2>بيانات الموظف</h2>
+    <div class="data-row"><span>الاسم:</span> <span id="resName"></span></div>
+    <div class="data-row"><span>رقم الملف:</span> <span id="resID"></span></div>
+    <div class="data-row"><span>التارجت:</span> <span id="resTarget"></span></div>
+    <button onclick="location.reload()">تسجيل خروج</button>
 </div>
 
 <script>
 function login() {
     const user = document.getElementById('user').value;
     const pass = document.getElementById('pass').value;
+    // تأكد من وضع رابط الـ /exec الخاص بك هنا
     const url = "https://script.google.com/macros/s/AKfycby0EllzsdlL31ffTdLyCE1uOf3Akxqrb_dwXbF7CRGjX50UrmjiqDVdCOm_lEQD3ZRo/exec";
     
     const script = document.createElement('script');
@@ -86,9 +57,11 @@ function handleResponse(res) {
     if (res.status === "success") {
         document.getElementById('loginArea').style.display = 'none';
         document.getElementById('dashboard').style.display = 'block';
-        document.getElementById('resName').innerText = "Hello, " + res.name;
+        document.getElementById('resName').innerText = res.name;
+        document.getElementById('resID').innerText = res.fileID;
+        document.getElementById('resTarget').innerText = res.target + "%";
     } else {
-        alert("Invalid login!");
+        alert("خطأ في بيانات الدخول");
     }
 }
 </script>
