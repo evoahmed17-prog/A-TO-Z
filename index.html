@@ -2,14 +2,14 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>نظام الموظفين</title>
+    <title>نظام إدارة الموظفين</title>
     <style>
         body { font-family: 'Segoe UI', sans-serif; background: #e9ecef; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
         .card { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); width: 320px; text-align: center; }
         input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
         button { background: #28a745; color: white; border: none; padding: 12px; border-radius: 6px; width: 100%; cursor: pointer; font-size: 16px; }
-        .result-box { display: none; }
-        .data-text { font-weight: bold; color: #333; margin-top: 10px; }
+        #resultArea { display: none; text-align: right; }
+        .data-text { font-weight: bold; color: #d9534f; }
     </style>
 </head>
 <body>
@@ -21,20 +21,21 @@
     <button onclick="login()">دخول</button>
 </div>
 
-<div id="resultArea" class="card result-box">
-    <h2>بيانات الموظف</h2>
+<div id="resultArea" class="card">
+    <h2 style="text-align:center;">بياناتك الوظيفية</h2>
     <p>الاسم: <span id="resName" class="data-text"></span></p>
     <p>رقم الملف: <span id="resID" class="data-text"></span></p>
     <p>التارجت: <span id="resTarget" class="data-text"></span></p>
-    <button onclick="location.reload()" style="background:#dc3545;">خروج</button>
+    <button onclick="location.reload()" style="background:#dc3545; margin-top:10px;">خروج</button>
 </div>
 
 <script>
 function login() {
     const user = document.getElementById('user').value;
     const pass = document.getElementById('pass').value;
-    // ضع رابط الـ Web App الخاص بك هنا (يجب أن ينتهي بـ /exec)
-    const url = "https://script.google.com/macros/s/AKfycby0EllzsdlL31ffTdLyCE1uOf3Akxqrb_dwXbF7CRGjX50UrmjiqDVdCOm_lEQD3ZRo/exec";
+    const url = "https://script.google.com/macros/s/AKfycby0EllzsdlL31ffTdLyCE1uOf3Akxqrb_dwXbF7CRGjX50UrmjiqDVdCOm_lEQD3ZRo/exec"; 
+    
+    alert("جاري التحقق من البيانات...");
     
     const script = document.createElement('script');
     script.src = `${url}?username=${user}&password=${pass}&callback=handleResponse`;
@@ -49,7 +50,7 @@ function handleResponse(res) {
         document.getElementById('resID').innerText = res.fileID;
         document.getElementById('resTarget').innerText = res.target;
     } else {
-        alert("خطأ: بيانات غير صحيحة.");
+        alert("خطأ: اسم المستخدم أو كلمة المرور غير صحيحة.");
     }
 }
 </script>
