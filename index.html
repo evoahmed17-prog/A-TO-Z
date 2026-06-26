@@ -2,33 +2,73 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>لوحة أداء الموظف</title>
+    <title>تسجيل الدخول</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background-color: #0a0a0a; color: white; margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        .card { background-color: #141414; padding: 40px; border-radius: 24px; border: 1px solid #222; width: 350px; text-align: center; }
-        input { width: 100%; padding: 15px; margin-bottom: 15px; background: #1a1a1a; border: 1px solid #333; border-radius: 12px; color: white; box-sizing: border-box; }
-        button { width: 100%; padding: 15px; background-color: #deff9a; color: black; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; }
-        #dashboard { display: none; width: 400px; }
-        .stat-val { font-size: 24px; color: #deff9a; font-weight: bold; }
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            /* خلفية الغابة الليلية */
+            background: linear-gradient(to bottom, #4a148c, #6a1b9a, #9c27b0);
+            background-image: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=2070'); /* يمكنك استبدال الرابط بصورة غابة أرجوانية */
+            background-size: cover;
+            font-family: sans-serif;
+        }
+
+        .login-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            padding: 40px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            width: 350px;
+            text-align: center;
+            color: white;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        h2 { margin-bottom: 25px; }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 25px;
+            color: white;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 20px;
+            background: white;
+            border: none;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
 
-<div id="loginArea" class="card">
-    <h2>تسجيل دخول الموظفين</h2>
-    <input type="text" id="user" placeholder="اسم المستخدم">
-    <input type="password" id="pass" placeholder="كلمة المرور">
-    <button onclick="login()">دخول إلى النظام</button>
+<div class="login-card" id="loginArea">
+    <h2>Login</h2>
+    <input type="text" id="user" placeholder="Username">
+    <input type="password" id="pass" placeholder="Password">
+    <button onclick="login()">Login</button>
 </div>
 
-<div id="dashboard" class="card">
-    <p>مرحباً بك،</p>
-    <h2 id="resName">--</h2>
-    <div style="background:#1a1a1a; padding:15px; border-radius:15px; margin:15px 0;">
-        <p>رقم الملف: <span id="resID" class="stat-val">--</span></p>
-        <p>التارجت المحقق: <span id="resTarget" class="stat-val">--</span></p>
-    </div>
-    <button style="background:#d9534f; color:white;" onclick="location.reload()">تسجيل خروج</button>
+<!-- هنا ستوضع لوحة التحكم بعد نجاح الدخول -->
+<div id="dashboard" class="login-card" style="display:none;">
+    <h2>Welcome Back!</h2>
+    <p id="resName"></p>
+    <button onclick="location.reload()">Logout</button>
 </div>
 
 <script>
@@ -46,11 +86,9 @@ function handleResponse(res) {
     if (res.status === "success") {
         document.getElementById('loginArea').style.display = 'none';
         document.getElementById('dashboard').style.display = 'block';
-        document.getElementById('resName').innerText = res.name;
-        document.getElementById('resID').innerText = res.fileID;
-        document.getElementById('resTarget').innerText = res.target + "%";
+        document.getElementById('resName').innerText = "Hello, " + res.name;
     } else {
-        alert("خطأ: بيانات الدخول غير صحيحة");
+        alert("Invalid login!");
     }
 }
 </script>
