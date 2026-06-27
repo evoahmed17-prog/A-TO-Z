@@ -44,7 +44,7 @@ let userData = {};
 function login() {
     const user = document.getElementById('user').value;
     const pass = document.getElementById('pass').value;
-    const url = "ضع_رابط_سكربت_جوجل_هنا";
+    const url = "https://script.google.com/macros/s/AKfycby0EllzsdlL31ffTdLyCE1uOf3Akxqrb_dwXbF7CRGjX50UrmjiqDVdCOm_lEQD3ZRo/exec";
     const script = document.createElement('script');
     script.src = `${url}?username=${user}&password=${pass}&callback=handleResponse`;
     document.body.appendChild(script);
