@@ -6,35 +6,19 @@
     <title>Employee Portal</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        body { margin: 0; height: 100vh; display: flex; justify-content: center; align-items: center; background: radial-gradient(circle, #2c3e50, #000); font-family: 'Cairo', sans-serif; overflow: hidden; touch-action: manipulation; }
-        .card { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); padding: 25px; border-radius: 30px; width: 90%; max-width: 400px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); color: white; }
+        body { margin: 0; height: 100vh; display: flex; justify-content: center; align-items: center; background: radial-gradient(circle, #2c3e50, #000); font-family: 'Cairo', sans-serif; overflow: hidden; }
+        .card { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); padding: 25px; border-radius: 30px; width: 90%; max-width: 400px; text-align: center; color: white; }
         input { width: 100%; padding: 15px; margin: 10px 0; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; box-sizing: border-box; color: white; text-align: right; }
         button { width: 100%; padding: 15px; margin-top: 10px; background: #fff; color: #000; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        
-        .progress-wrapper { margin: 15px 0; position: relative; }
-        .progress-label { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 5px; color: #fff; }
+        .progress-wrapper { margin: 15px 0; }
         .progress-container { width: 100%; background: #333; border-radius: 10px; height: 12px; overflow: hidden; }
         .progress-bar { height: 100%; background: linear-gradient(90deg, #00ffcc, #00d4ff); width: 0%; transition: width 1.5s ease-in-out; }
-
-        .footer { position: fixed; bottom: 10px; width: 100%; text-align: center; color: rgba(255,255,255,0.5); font-size: 11px; }
-        .tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; margin-bottom: 20px; }
-        .tab-btn { padding: 8px 2px; border: none; border-radius: 8px; background: rgba(255,255,255,0.1); color: white; font-size: 10px; cursor: pointer; transition: 0.3s; }
-        .tab-btn.active { background: #fff; color: #000; }
-        
-        #dataDisplay { padding: 15px; font-size: 17px; background: rgba(0,0,0,0.3); border-radius: 15px; color: #00ffcc; font-weight: bold; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.1); }
-        .logout { background: #ff4757 !important; color: white !important; }
+        .footer { position: fixed; bottom: 10px; width: 100%; text-align: center; color: rgba(255,255,255,0.3); font-size: 10px; }
         #dashboard { display: none; }
+        #modal { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); justify-content:center; align-items:center; z-index:2000; }
     </style>
 </head>
 <body>
-
-<div id="welcomeModal" style="display:flex; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); backdrop-filter:blur(10px); z-index:1000; justify-content:center; align-items:center;">
-    <div class="card">
-        <h2 style="color: #00ffcc;">أهلاً بك!</h2>
-        <p style="font-size: 14px;">أهلاً بيك في صفحة بيانات الموظف. هذه نسخة تجريبية، إذا كان لديك أي استفسار يرجى التوجه للإدارة.</p>
-        <button onclick="document.getElementById('welcomeModal').style.display='none'">فهمت ذلك</button>
-    </div>
-</div>
 
 <div class="card" id="loginArea">
     <h2>تسجيل الدخول</h2>
@@ -45,84 +29,89 @@
 
 <div id="dashboard" class="card">
     <h2 id="userNameDisplay">--</h2>
-    <div style="font-size: 12px; color: #ddd; margin-bottom: 10px;">🆔 الرقم الوظيفي: <span id="resID">--</span></div>
+    <div style="font-size: 12px; color: #ddd; margin-bottom: 10px;">صافي المرتب: <span id="netSalary" style="color:#00ffcc; font-size:24px;">0</span> جنيه</div>
+    <div class="progress-container"><div id="progBar" class="progress-bar"></div></div>
     
-    <div class="progress-wrapper">
-        <div class="progress-label">
-            <span>نسبة التارجت</span>
-            <span id="targetText" style="font-weight: bold; color: #00ffcc;">0%</span>
-        </div>
-        <div class="progress-container"><div id="progBar" class="progress-bar"></div></div>
+    <div style="margin-top: 20px;">
+        <button onclick="showDetails()">عرض تفاصيل الحسبة</button>
+        <button style="background:#ff4757; color:white;" onclick="location.reload()">تسجيل خروج</button>
     </div>
-
-    <div style="font-size: 11px; margin-top:5px; opacity: 0.7;">تاريخ التحديث: <span id="dateDisplay"></span></div>
-
-    <div class="tabs" style="margin-top: 15px;">
-        <button class="tab-btn active" id="btn1" onclick="showData('attendance', 'btn1')">الحضور</button>
-        <button class="tab-btn" id="btn2" onclick="showData('absence', 'btn2')">الغياب</button>
-        <button class="tab-btn" id="btn3" onclick="showData('deduction', 'btn3')">الخصومات</button>
-        <button class="tab-btn" id="btn4" onclick="showData('allowance', 'btn4')">بدل طبيعة</button>
-        <button class="tab-btn" id="btn5" onclick="showData('adminPenalty', 'btn5')">خصم إداري</button>
-        <button class="tab-btn" id="btn6" onclick="showData('bonuses', 'btn6')">المكافآت</button>
-    </div>
-    <div id="dataDisplay">--</div>
-    <button class="logout" onclick="location.reload()">تسجيل خروج</button>
 </div>
 
-<div class="footer">
-    Create By: Ahmed Abdelfattah | <a href="https://wa.me/201050662535" style="color:#00ffcc; text-decoration:none;">WhatsApp: 01050662535</a>
+<div id="modal">
+    <div class="card">
+        <h3>تفاصيل الراتب</h3>
+        <div id="detailsText" style="text-align: right; font-size: 14px; margin: 15px 0;"></div>
+        <button onclick="document.getElementById('modal').style.display='none'">إغلاق</button>
+    </div>
 </div>
 
 <script>
-let userData = {};
-const scriptUrl = "https://script.google.com/macros/s/AKfycby0EllzsdlL31ffTdLyCE1uOf3Akxqrb_dwXbF7CRGjX50UrmjiqDVdCOm_lEQD3ZRo/exec";
+let currentDetails = {};
+const basic = 5500;
 
-// تفعيل زر Enter
-document.getElementById("pass").addEventListener("keypress", function(event) {
-    if (event.key === "Enter") login();
-});
+document.getElementById("pass").addEventListener("keypress", (e) => { if(e.key==="Enter") login(); });
 
 function login() {
     const user = document.getElementById('user').value;
     const pass = document.getElementById('pass').value;
     const script = document.createElement('script');
-    script.src = `${scriptUrl}?username=${user}&password=${pass}&callback=handleResponse`;
+    script.src = `https://script.google.com/macros/s/AKfycby0EllzsdlL31ffTdLyCE1uOf3Akxqrb_dwXbF7CRGjX50UrmjiqDVdCOm_lEQD3ZRo/exec?username=${user}&password=${pass}&callback=handleResponse`;
     document.body.appendChild(script);
 }
 
 function handleResponse(res) {
     if (res.status === "success") {
-        userData = res;
         document.getElementById('loginArea').style.display = 'none';
         document.getElementById('dashboard').style.display = 'block';
         document.getElementById('userNameDisplay').innerText = res.name;
-        document.getElementById('resID').innerText = res.fileID;
-        document.getElementById('targetText').innerText = res.target + "%";
+        
+        // حساب الحسبة
+        let targetVal = (res.target / 100) * 1000;
+        let bonus = getBonus(res.target);
+        let deduction = ((parseInt(res.absence)||0) + (parseInt(res.adminPenalty)||0)) * (basic/30);
+        let net = (basic + targetVal + bonus + (parseInt(res.allowance)||0)) - deduction;
+        
+        document.getElementById('netSalary').innerText = Math.round(net);
         document.getElementById('progBar').style.width = res.target + "%";
-        document.getElementById('dateDisplay').innerText = new Date().toLocaleDateString('ar-EG');
-        showData('attendance', 'btn1');
-    } else { alert("بيانات الدخول غير صحيحة"); }
+        
+        currentDetails = { basic, targetVal, bonus, allowance: res.allowance, deduction: Math.round(deduction) };
+    } else { alert("خطأ في البيانات"); }
 }
 
-function showData(type, btnId) {
-    const labels = { attendance: "أيام الحضور", absence: "أيام الغياب", deduction: "الخصومات", allowance: "بدل طبيعة العمل", adminPenalty: "خصم إداري", bonuses: "المكافآت" };
-    let val = userData[type];
-    let displayVal = "";
+function getBonus(target) {
+    if(target >= 226) return 4940;
+    if(target >= 221) return 4640;
+    if(target >= 216) return 4340;
+    if(target >= 211) return 4040;
+    if(target >= 206) return 3740;
+    if(target >= 201) return 3440;
+    if(target >= 196) return 3140;
+    if(target >= 191) return 2870;
+    if(target >= 186) return 2600;
+    if(target >= 181) return 2360;
+    if(target >= 176) return 2120;
+    if(target >= 171) return 1910;
+    if(target >= 166) return 1700;
+    if(target >= 161) return 1525;
+    if(target >= 156) return 1350;
+    if(target >= 151) return 1200;
+    if(target >= 146) return 1050;
+    if(target >= 141) return 925;
+    if(target >= 136) return 800;
+    if(target >= 131) return 700;
+    return 0;
+}
 
-    if (val === "" || val === 0 || val === null || val === undefined) {
-        if (type === 'attendance') displayVal = "لا يوجد بيانات حضور";
-        else if (type === 'absence') displayVal = "لا يوجد غياب";
-        else if (type === 'deduction') displayVal = "لا يوجد خصومات";
-        else if (type === 'allowance') displayVal = "لا يوجد بدل طبيعة عمل";
-        else if (type === 'adminPenalty') displayVal = "لا يوجد خصم إداري";
-        else if (type === 'bonuses') displayVal = "لا يوجد مكافآت";
-    } else {
-        displayVal = val + (type === 'allowance' ? " جنيه" : " يوم");
-    }
-
-    document.getElementById('dataDisplay').innerText = labels[type] + ": " + displayVal;
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    document.getElementById(btnId).classList.add('active');
+function showDetails() {
+    document.getElementById('detailsText').innerHTML = `
+        الأساسي: ${currentDetails.basic} ج.م<br>
+        قيمة التارجت: ${Math.round(currentDetails.targetVal)} ج.م<br>
+        الحافز (الجدول): ${currentDetails.bonus} ج.م<br>
+        بدل طبيعة العمل: ${currentDetails.allowance || 0} ج.م<br>
+        الخصومات: -${currentDetails.deduction} ج.م
+    `;
+    document.getElementById('modal').style.display = 'flex';
 }
 </script>
 </body>
