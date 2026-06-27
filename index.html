@@ -2,76 +2,77 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>Employee ID System</title>
+    <title>Employee Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700&display=swap" rel="stylesheet">
     <style>
         body { 
             margin: 0; height: 100vh; display: flex; justify-content: center; align-items: center; 
             background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=2070') center/cover; 
-            font-family: 'Cairo', sans-serif; font-weight: 700;
+            font-family: 'Cairo', sans-serif;
         }
         
         .card { 
-            background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(15px);
-            padding: 40px; border-radius: 30px; width: 350px; text-align: center; 
-            color: #000; box-shadow: 0 15px 35px rgba(0,0,0,0.3); border: 2px solid #000;
+            background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px);
+            padding: 40px; border-radius: 40px; width: 400px; text-align: center; 
+            color: #000; box-shadow: 0 20px 50px rgba(0,0,0,0.4); border: 1px solid #fff;
         }
 
         input { 
-            width: 100%; padding: 15px; margin: 10px 0; background: rgba(0,0,0,0.05); 
-            border: 2px solid #000; border-radius: 15px; color: #000; font-weight: bold;
-            box-sizing: border-box; text-align: center;
+            width: 100%; padding: 18px; margin: 15px 0; background: #f0f0f0; 
+            border: none; border-radius: 20px; text-align: center; font-size: 16px; box-sizing: border-box;
         }
 
         button { 
-            width: 100%; padding: 15px; margin-top: 15px; background: #000; 
-            color: #fff; border: none; border-radius: 15px; font-weight: 700; cursor: pointer;
+            width: 100%; padding: 18px; margin-top: 10px; background: #000; 
+            color: #fff; border: none; border-radius: 20px; font-weight: 700; cursor: pointer; font-size: 16px;
         }
 
-        .data-box { 
-            background: rgba(0,0,0,0.05); padding: 25px; border-radius: 20px; margin: 20px 0;
-            border: 2px solid #000; text-align: right;
-        }
-        
-        .data-row { display: flex; justify-content: space-between; margin: 15px 0; }
+        /* تنسيق البيانات الاحترافي */
         #dashboard { display: none; }
+        .info-card { 
+            background: #000; color: #fff; padding: 25px; border-radius: 25px; 
+            margin: 25px 0; text-align: right;
+        }
+        .data-row { display: flex; justify-content: space-between; align-items: center; margin: 18px 0; }
+        .label { color: #888; font-size: 14px; }
+        .value { font-size: 20px; font-weight: bold; }
     </style>
 </head>
 <body>
 
 <div class="card" id="loginArea">
-    <h2 style="margin-bottom: 20px;">دخول</h2>
+    <h2>تسجيل دخول الموظفين</h2>
     <input type="text" id="user" placeholder="اسم المستخدم">
     <input type="password" id="pass" placeholder="كلمة المرور">
-    <button onclick="login()">دخول</button>
+    <button onclick="login()">دخول إلى النظام</button>
 </div>
 
 <div id="dashboard" class="card">
-    <h2 style="border-bottom: 3px solid #000; padding-bottom: 10px;">Employee ID Card</h2>
+    <h2 style="margin-bottom: 5px;">Employee Dashboard</h2>
+    <p style="color: #666; margin-bottom: 25px;">بياناتك الوظيفية المحدثة</p>
     
-    <div class="data-box">
+    <div class="info-card">
         <div class="data-row">
-            <span id="resName">--</span>
-            <span>:Name 👤</span>
+            <span class="value" id="resName">--</span>
+            <span class="label">Name 👤</span>
         </div>
         <div class="data-row">
-            <span id="resID">--</span>
-            <span>:ID Number 🆔</span>
+            <span class="value" id="resID">--</span>
+            <span class="label">ID Number 🆔</span>
         </div>
         <div class="data-row">
-            <span id="resTarget" style="color: #d9534f;">--</span>
-            <span>:Target 🎯</span>
+            <span class="value" id="resTarget" style="color: #deff9a;">--</span>
+            <span class="label">Target 🎯</span>
         </div>
     </div>
     
-    <button onclick="location.reload()">تسجيل خروج</button>
+    <button onclick="location.reload()" style="background:#d9534f;">تسجيل خروج</button>
 </div>
 
 <script>
 function login() {
     const user = document.getElementById('user').value;
     const pass = document.getElementById('pass').value;
-    // تأكد من وضع رابط الـ /exec الخاص بك هنا
     const url = "https://script.google.com/macros/s/AKfycby0EllzsdlL31ffTdLyCE1uOf3Akxqrb_dwXbF7CRGjX50UrmjiqDVdCOm_lEQD3ZRo/exec";
     
     const script = document.createElement('script');
@@ -87,7 +88,7 @@ function handleResponse(res) {
         document.getElementById('resID').innerText = res.fileID;
         document.getElementById('resTarget').innerText = res.target + "%";
     } else {
-        alert("خطأ في بيانات الدخول");
+        alert("خطأ: بيانات الدخول غير صحيحة");
     }
 }
 </script>
