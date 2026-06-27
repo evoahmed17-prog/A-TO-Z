@@ -2,70 +2,95 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>لوحة أداء الموظف</title>
+    <title>Employee Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700&display=swap" rel="stylesheet">
     <style>
-        :root { --bg: #050505; --card: #111111; --accent: #deff9a; --text: #ffffff; }
-        body { background: var(--bg); color: var(--text); font-family: sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .card { background: var(--card); padding: 30px; border-radius: 20px; width: 350px; border: 1px solid #333; text-align: center; }
-        input { width: 100%; padding: 12px; margin: 10px 0; background: #222; border: 1px solid #444; border-radius: 8px; color: white; box-sizing: border-box; }
-        button { width: 100%; padding: 12px; background: var(--accent); border: none; border-radius: 8px; font-weight: bold; cursor: pointer; color: black; }
-        .data-row { display: flex; justify-content: space-between; margin: 10px 0; border-bottom: 1px solid #333; padding-bottom: 5px; }
+        body { 
+            margin: 0; height: 100vh; display: flex; justify-content: center; align-items: center; 
+            background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=2070') center/cover; 
+            font-family: 'Cairo', sans-serif;
+        }
+        
+        .card { 
+            background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px);
+            padding: 40px; border-radius: 40px; width: 400px; text-align: center; 
+            color: #000; box-shadow: 0 20px 50px rgba(0,0,0,0.4); border: 1px solid #fff;
+        }
+
+        input { 
+            width: 100%; padding: 18px; margin: 15px 0; background: #f0f0f0; 
+            border: none; border-radius: 20px; text-align: center; font-size: 16px; box-sizing: border-box;
+        }
+
+        button { 
+            width: 100%; padding: 18px; margin-top: 10px; background: #000; 
+            color: #fff; border: none; border-radius: 20px; font-weight: 700; cursor: pointer; font-size: 16px;
+        }
+
+        /* تنسيق البيانات الاحترافي */
         #dashboard { display: none; }
+        .info-card { 
+            background: #000; color: #fff; padding: 25px; border-radius: 25px; 
+            margin: 25px 0; text-align: right;
+        }
+        .data-row { display: flex; justify-content: space-between; align-items: center; margin: 18px 0; }
+        .label { color: #888; font-size: 14px; }
+        .value { font-size: 20px; font-weight: bold; }
     </style>
 </head>
 <body>
 
-    <div id="loginSection" class="card">
-        <h3>تسجيل الدخول</h3>
-        <input type="text" id="username" placeholder="رقم الملف">
-        <input type="password" id="password" placeholder="كلمة المرور">
-        <button id="loginBtn" onclick="login()">دخول</button>
+<div class="card" id="loginArea">
+    <h2>تسجيل دخول الموظفين</h2>
+    <input type="text" id="user" placeholder="اسم المستخدم">
+    <input type="password" id="pass" placeholder="كلمة المرور">
+    <button onclick="login()">دخول  </button>
+</div>
+
+<div id="dashboard" class="card">
+    <h2 style="margin-bottom: 5px;">Employee Dashboard</h2>
+    <p style="color: #666; margin-bottom: 25px;">بياناتك الوظيفية </p>
+    
+    <div class="info-card">
+        <div class="data-row">
+            <span class="value" id="resName">--</span>
+            <span class="label">Name 👤</span>
+        </div>
+        <div class="data-row">
+            <span class="value" id="resID">--</span>
+            <span class="label">ID Number 🆔</span>
+        </div>
+        <div class="data-row">
+            <span class="value" id="resTarget" style="color: #deff9a;">--</span>
+            <span class="label">Target 🎯</span>
+        </div>
     </div>
+    
+    <button onclick="location.reload()" style="background:#d9534f;">تسجيل خروج</button>
+</div>
 
-    <div id="dashboard" class="card">
-        <h2 id="dispName" style="color: var(--accent)">--</h2>
-        <div class="data-row"><span>رقم الملف:</span> <span id="dispID">--</span></div>
-        <div class="data-row"><span>التارجت:</span> <span id="dispTarget">--</span></div>
-        <div class="data-row"><span>الحضور:</span> <span id="dispAtt">--</span></div>
-        <div class="data-row"><span>الغياب:</span> <span id="dispAbs">--</span></div>
-        <div class="data-row"><span>الخصومات:</span> <span id="dispDed">--</span></div>
-        <button onclick="location.reload()" style="background:#333; color:white; margin-top:20px;">خروج</button>
-    </div>
+<script>
+function login() {
+    const user = document.getElementById('user').value;
+    const pass = document.getElementById('pass').value;
+    const url = "https://script.google.com/macros/s/AKfycby0EllzsdlL31ffTdLyCE1uOf3Akxqrb_dwXbF7CRGjX50UrmjiqDVdCOm_lEQD3ZRo/exec";
+    
+    const script = document.createElement('script');
+    script.src = `${url}?username=${user}&password=${pass}&callback=handleResponse`;
+    document.body.appendChild(script);
+}
 
-    <script>
-        async function login() {
-            const btn = document.getElementById('loginBtn');
-            const user = document.getElementById('username').value;
-            const pass = document.getElementById('password').value;
-            // الرابط الذي أرسلته قمت بدمجه هنا
-            const url = "https://script.google.com/macros/s/AKfycby0EllzsdlL31ffTdLyCE1uOf3Akxqrb_dwXbF7CRGjX50UrmjiqDVdCOm_lEQD3ZRo/exec";
-            
-            btn.innerText = "جاري التحقق...";
-            btn.disabled = true;
-
-            try {
-                const response = await fetch(`${url}?username=${user}&password=${pass}`);
-                const res = await response.json();
-                
-                if (res.status === "success") {
-                    document.getElementById('loginSection').style.display = 'none';
-                    document.getElementById('dashboard').style.display = 'block';
-                    document.getElementById('dispName').innerText = res.name;
-                    document.getElementById('dispID').innerText = res.fileID;
-                    document.getElementById('dispTarget').innerText = res.target + "%";
-                    document.getElementById('dispAtt').innerText = res.attendance + " يوم";
-                    document.getElementById('dispAbs').innerText = res.absence + " يوم";
-                    document.getElementById('dispDed').innerText = res.deductions + " ج.م";
-                } else {
-                    alert("بيانات خاطئة، يرجى التأكد من رقم الملف وكلمة المرور");
-                }
-            } catch (error) {
-                alert("خطأ في الاتصال، تأكد من إعدادات الـ Deployment في جوجل سكربت");
-            } finally {
-                btn.innerText = "دخول";
-                btn.disabled = false;
-            }
-        }
-    </script>
+function handleResponse(res) {
+    if (res.status === "success") {
+        document.getElementById('loginArea').style.display = 'none';
+        document.getElementById('dashboard').style.display = 'block';
+        document.getElementById('resName').innerText = res.name;
+        document.getElementById('resID').innerText = res.fileID;
+        document.getElementById('resTarget').innerText = res.target + "%";
+    } else {
+        alert("خطأ: بيانات الدخول غير صحيحة");
+    }
+}
+</script>
 </body>
 </html>
