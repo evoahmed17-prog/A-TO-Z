@@ -5,29 +5,50 @@
     <title>Employee Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        body { margin: 0; height: 100vh; display: flex; justify-content: center; align-items: center; background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=2070') center/cover; font-family: 'Cairo', sans-serif; }
-        .card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(15px); padding: 30px; border-radius: 40px; width: 450px; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
-        .tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 25px; }
-        .tab-btn { padding: 12px 5px; border: none; border-radius: 15px; cursor: pointer; font-size: 13px; font-weight: bold; background: #eee; transition: all 0.3s ease; }
-        .tab-btn:hover { background: #ddd; transform: translateY(-2px); }
-        .tab-btn.active { background: #000; color: #fff; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
-        #dataDisplay { padding: 25px; font-size: 26px; font-weight: bold; color: #fff; background: linear-gradient(135deg, #222, #000); border-radius: 20px; margin-bottom: 20px; }
-        button.logout { background: #ff4757; color: white; border: none; padding: 12px; border-radius: 15px; width: 100%; cursor: pointer; }
+        body { 
+            margin: 0; height: 100vh; display: flex; justify-content: center; align-items: center; 
+            background: #f4f7f6; font-family: 'Cairo', sans-serif; 
+        }
+        .card { 
+            background: #ffffff; padding: 40px; border-radius: 12px; width: 450px; 
+            text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.08); border: 1px solid #e0e0e0;
+        }
+        h2 { color: #333; font-size: 22px; margin-bottom: 20px; }
+        input { 
+            width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; 
+            border-radius: 6px; text-align: right; box-sizing: border-box; 
+        }
+        button { 
+            width: 100%; padding: 12px; margin-top: 10px; background: #2563eb; 
+            color: #fff; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; 
+        }
+        .tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 20px; }
+        .tab-btn { 
+            padding: 10px 5px; border: 1px solid #e0e0e0; border-radius: 6px; 
+            background: #fff; cursor: pointer; font-size: 12px; transition: 0.2s;
+        }
+        .tab-btn.active { background: #2563eb; color: #fff; border-color: #2563eb; }
+        #dataDisplay { 
+            padding: 20px; font-size: 20px; background: #f8fafc; border: 1px solid #e2e8f0;
+            border-radius: 8px; color: #1e293b; font-weight: bold; margin-bottom: 20px;
+        }
+        .logout { background: #ef4444 !important; }
+        #dashboard { display: none; }
     </style>
 </head>
 <body>
 
 <div class="card" id="loginArea">
-    <h2>مرحباً بك يا بطل</h2>
-    <input type="text" id="user" placeholder="اسم المستخدم" style="width:90%; padding:15px; margin:10px 0; border-radius:15px; border:1px solid #ccc;">
-    <input type="password" id="pass" placeholder="كلمة المرور" style="width:90%; padding:15px; margin:10px 0; border-radius:15px; border:1px solid #ccc;" onkeypress="if(event.key==='Enter') login()">
-    <button onclick="login()" style="width:90%; padding:15px; background:#000; color:#fff; border-radius:15px; border:none; cursor:pointer;">دخول</button>
+    <h2>تسجيل دخول الموظفين</h2>
+    <input type="text" id="user" placeholder="اسم المستخدم">
+    <input type="password" id="pass" placeholder="كلمة المرور" onkeypress="if(event.key==='Enter') login()">
+    <button onclick="login()">دخول</button>
 </div>
 
-<div id="dashboard" class="card" style="display:none;">
+<div id="dashboard" class="card">
     <h2 id="userNameDisplay">--</h2>
-    <div style="margin-bottom: 20px; font-size: 14px; color: #666;">
-        🆔 الرقم: <span id="resID">--</span> | 🎯 التارجت: <span id="resTarget">--</span>
+    <div style="margin-bottom: 20px; font-size: 14px; color: #666; border-bottom: 1px solid #eee; padding-bottom: 10px;">
+        🆔 الرقم: <span id="resID" style="font-weight:bold;">--</span> | 🎯 التارجت: <span id="resTarget" style="font-weight:bold;">--</span>
     </div>
 
     <div class="tabs">
