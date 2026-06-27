@@ -5,80 +5,46 @@
     <title>Employee Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700&display=swap" rel="stylesheet">
     <style>
-        body { 
-            margin: 0; height: 100vh; display: flex; justify-content: center; align-items: center; 
-            background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=2070') center/cover; 
-            font-family: 'Cairo', sans-serif;
-        }
-        
-        .card { 
-            background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px);
-            padding: 40px; border-radius: 40px; width: 400px; text-align: center; 
-            color: #000; box-shadow: 0 20px 50px rgba(0,0,0,0.4); border: 1px solid #fff;
-        }
-
-        input { 
-            width: 100%; padding: 18px; margin: 15px 0; background: #f0f0f0; 
-            border: none; border-radius: 20px; text-align: center; font-size: 16px; box-sizing: border-box;
-        }
-
-        button { 
-            width: 100%; padding: 18px; margin-top: 10px; background: #000; 
-            color: #fff; border: none; border-radius: 20px; font-weight: 700; cursor: pointer; font-size: 16px;
-        }
-
-        /* تنسيق البيانات الاحترافي */
+        body { margin: 0; height: 100vh; display: flex; justify-content: center; align-items: center; background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=2070') center/cover; font-family: 'Cairo', sans-serif; }
+        .card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px); padding: 40px; border-radius: 40px; width: 400px; text-align: center; color: #000; box-shadow: 0 20px 50px rgba(0,0,0,0.4); }
+        input { width: 100%; padding: 15px; margin: 10px 0; background: #f0f0f0; border: none; border-radius: 20px; text-align: center; box-sizing: border-box; }
+        button { width: 100%; padding: 15px; margin-top: 10px; background: #000; color: #fff; border: none; border-radius: 20px; font-weight: 700; cursor: pointer; }
+        .info-card { background: #000; color: #fff; padding: 20px; border-radius: 25px; margin: 20px 0; }
+        .data-row { display: flex; justify-content: space-between; margin: 10px 0; }
         #dashboard { display: none; }
-        <div class="info-card">
-    <div class="data-row">
-        <span class="value" id="resName">--</span>
-        <span class="label">Name 👤</span>
+        .action-btn { background: #444 !important; font-size: 13px; margin: 5px 0 !important; }
+    </style>
+</head>
+<body>
+
+<div class="card" id="loginArea">
+    <h2>تسجيل دخول الموظفين</h2>
+    <input type="text" id="user" placeholder="اسم المستخدم">
+    <input type="password" id="pass" placeholder="كلمة المرور">
+    <button onclick="login()">دخول</button>
+</div>
+
+<div id="dashboard" class="card">
+    <h2>Employee Dashboard</h2>
+    <div class="info-card">
+        <div class="data-row"><span>Name:</span> <span id="resName">--</span></div>
+        <div class="data-row"><span>ID:</span> <span id="resID">--</span></div>
+        <div class="data-row"><span>Target:</span> <span id="resTarget">--</span></div>
+        
+        <button class="action-btn" onclick="showData('attendance')">عدد أيام الحضور</button>
+        <button class="action-btn" onclick="showData('absence')">عدد أيام الغياب</button>
+        <button class="action-btn" onclick="showData('deduction')">الخصومات</button>
+        <div id="dataDisplay" style="margin-top:15px; font-weight:bold; color:#deff9a;">--</div>
     </div>
-    <div class="data-row">
-        <span class="value" id="resID">--</span>
-        <span class="label">ID Number 🆔</span>
-    </div>
-    <div class="data-row">
-        <span class="value" id="resTarget" style="color: #deff9a;">--</span>
-        <span class="label">Target 🎯</span>
-    </div>
-    
-    <div style="margin-top: 20px;">
-        <button onclick="showData('attendance')" style="background:#555; padding: 10px; margin: 5px; font-size: 12px;">عدد أيام الحضور</button>
-        <button onclick="showData('absence')" style="background:#555; padding: 10px; margin: 5px; font-size: 12px;">عدد أيام الغياب</button>
-        <button onclick="showData('deduction')" style="background:#555; padding: 10px; margin: 5px; font-size: 12px;">الخصومات</button>
-    </div>
-    <div id="dataDisplay" style="margin-top:15px; font-weight:bold; color:#ff0;">--</div>
+    <button onclick="location.reload()" style="background:#d9534f;">تسجيل خروج</button>
 </div>
 
 <script>
-    let userData = {}; // لتخزين البيانات بعد تسجيل الدخول
-
-    function handleResponse(res) {
-        if (res.status === "success") {
-            userData = res; // حفظ البيانات
-            document.getElementById('loginArea').style.display = 'none';
-            document.getElementById('dashboard').style.display = 'block';
-            document.getElementById('resName').innerText = res.name;
-            document.getElementById('resID').innerText = res.fileID;
-            document.getElementById('resTarget').innerText = res.target + "%";
-        } else {
-            alert("خطأ: بيانات الدخول غير صحيحة");
-        }
-    }
-
-    function showData(type) {
-        let display = document.getElementById('dataDisplay');
-        if (type === 'attendance') display.innerText = "أيام الحضور: " + userData.attendance;
-        if (type === 'absence') display.innerText = "أيام الغياب: " + userData.absence;
-        if (type === 'deduction') display.innerText = "الخصومات: " + userData.deduction;
-    }
-</script>
+let userData = {};
 function login() {
     const user = document.getElementById('user').value;
     const pass = document.getElementById('pass').value;
-    const url = "https://script.google.com/macros/s/AKfycby0EllzsdlL31ffTdLyCE1uOf3Akxqrb_dwXbF7CRGjX50UrmjiqDVdCOm_lEQD3ZRo/exec";
-    
+    const url = "ضع_رابط_سكربت_جوجل_هنا";
     const script = document.createElement('script');
     script.src = `${url}?username=${user}&password=${pass}&callback=handleResponse`;
     document.body.appendChild(script);
@@ -86,14 +52,19 @@ function login() {
 
 function handleResponse(res) {
     if (res.status === "success") {
+        userData = res;
         document.getElementById('loginArea').style.display = 'none';
         document.getElementById('dashboard').style.display = 'block';
         document.getElementById('resName').innerText = res.name;
         document.getElementById('resID').innerText = res.fileID;
         document.getElementById('resTarget').innerText = res.target + "%";
-    } else {
-        alert("خطأ: بيانات الدخول غير صحيحة");
-    }
+    } else { alert("بيانات الدخول غير صحيحة"); }
+}
+
+function showData(type) {
+    const display = document.getElementById('dataDisplay');
+    const labels = { attendance: "أيام الحضور: ", absence: "أيام الغياب: ", deduction: "الخصومات: " };
+    display.innerText = labels[type] + (userData[type] || 0);
 }
 </script>
 </body>
