@@ -1,26 +1,56 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>Employee Dashboard</title>
+    <style>
+        body { background: #0f172a; color: white; font-family: sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .card { background: #1e293b; padding: 30px; border-radius: 20px; width: 350px; text-align: center; }
+        .input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid #475569; background: #0f172a; color: white; box-sizing: border-box; }
+        .btn { width: 100%; padding: 12px; background: #3b82f6; color: white; border: none; border-radius: 8px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+<div class="card" id="loginCard">
+    <h2>تسجيل الدخول</h2>
+    <input type="text" id="u" class="input" placeholder="رقم الملف">
+    <input type="password" id="p" class="input" placeholder="كلمة المرور">
+    <button class="btn" id="loginBtn" onclick="sendRequest()">دخول</button>
+</div>
+
 <script>
-function login() {
-    const url = "ضع_رابط_الـ_Exec_الجديد_هنا"; 
+function sendRequest() {
+    // ضع رابط الـ Web App الخاص بك هنا (الذي ينتهي بـ /exec)
+    const url = "https://script.google.com/macros/s/AKfycby0EllzsdlL31ffTdLyCE1uOf3Akxqrb_dwXbF7CRGjX50UrmjiqDVdCOm_lEQD3ZRo/exec";
     const u = document.getElementById('u').value;
     const p = document.getElementById('p').value;
     const btn = document.getElementById('loginBtn');
     
-    btn.innerText = "جاري التحقق...";
+    btn.innerText = "جاري الاتصال...";
     
     const script = document.createElement('script');
     script.src = `${url}?username=${u}&password=${p}&callback=res`;
     document.body.appendChild(script);
+    
+    // إذا لم يرد السيرفر خلال 8 ثواني، أخبر المستخدم
+    setTimeout(() => {
+        if(btn.innerText === "جاري الاتصال...") {
+            alert("حدث خطأ في الاتصال بالسيرفر. تأكد من إعدادات الـ Deployment (يجب أن يكون Anyone).");
+            location.reload();
+        }
+    }, 8000);
 }
 
 function res(data) {
     if(data.status === "success") {
-        // هنا يتم الانتقال لصفحة عرض البيانات
-        alert("تم الدخول بنجاح!");
-        console.log(data); // للتحقق من البيانات في الـ Console
-        // يمكنك هنا كتابة كود إظهار الداشبورد
+        alert("أهلاً بك يا " + data.name);
+        // هنا يمكنك إضافة كود الانتقال لصفحة البيانات
     } else {
-        alert("بيانات الدخول غير صحيحة.");
-        document.getElementById('loginBtn').innerText = "دخول إلى النظام";
+        alert("خطأ: تأكد من رقم الملف وكلمة المرور.");
+        location.reload();
     }
 }
 </script>
+</body>
+</html>
