@@ -5,9 +5,10 @@
     <title>Employee Dashboard</title>
     <style>
         body { background: #0f172a; color: white; font-family: sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .card { background: #1e293b; padding: 30px; border-radius: 20px; width: 350px; text-align: center; }
-        .input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid #475569; background: #0f172a; color: white; box-sizing: border-box; }
-        .btn { width: 100%; padding: 12px; background: #3b82f6; color: white; border: none; border-radius: 8px; cursor: pointer; }
+        .card { background: #1e293b; padding: 30px; border-radius: 20px; width: 350px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
+        .input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid #475569; background: #0f172a; color: white; box-sizing: border-box; text-align: center; }
+        .btn { width: 100%; padding: 12px; background: #3b82f6; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        #dashboard { display: none; }
     </style>
 </head>
 <body>
@@ -16,39 +17,41 @@
     <h2>تسجيل الدخول</h2>
     <input type="text" id="u" class="input" placeholder="رقم الملف">
     <input type="password" id="p" class="input" placeholder="كلمة المرور">
-    <button class="btn" id="loginBtn" onclick="sendRequest()">دخول</button>
+    <button class="btn" id="loginBtn" onclick="login()">دخول</button>
+</div>
+
+<div class="card" id="dashboard">
+    <h2 id="name">أهلاً بك</h2>
+    <p>التارجت المحقق: <b id="target"></b>%</p>
+    <p>أيام الحضور: <b id="attend"></b></p>
+    <button class="btn" style="background:#ef4444;" onclick="location.reload()">خروج</button>
 </div>
 
 <script>
-function sendRequest() {
-    // ضع رابط الـ Web App الخاص بك هنا (الذي ينتهي بـ /exec)
+function login() {
+    // ضع رابط الـ Web App الخاص بك هنا
     const url = "https://script.google.com/macros/s/AKfycby0EllzsdlL31ffTdLyCE1uOf3Akxqrb_dwXbF7CRGjX50UrmjiqDVdCOm_lEQD3ZRo/exec";
     const u = document.getElementById('u').value;
     const p = document.getElementById('p').value;
     const btn = document.getElementById('loginBtn');
     
-    btn.innerText = "جاري الاتصال...";
+    btn.innerText = "جاري التحقق...";
     
     const script = document.createElement('script');
     script.src = `${url}?username=${u}&password=${p}&callback=res`;
     document.body.appendChild(script);
-    
-    // إذا لم يرد السيرفر خلال 8 ثواني، أخبر المستخدم
-    setTimeout(() => {
-        if(btn.innerText === "جاري الاتصال...") {
-            alert("حدث خطأ في الاتصال بالسيرفر. تأكد من إعدادات الـ Deployment (يجب أن يكون Anyone).");
-            location.reload();
-        }
-    }, 8000);
 }
 
 function res(data) {
     if(data.status === "success") {
-        alert("أهلاً بك يا " + data.name);
-        // هنا يمكنك إضافة كود الانتقال لصفحة البيانات
+        document.getElementById('loginCard').style.display = 'none';
+        document.getElementById('dashboard').style.display = 'block';
+        document.getElementById('name').innerText = "أهلاً بك، " + data.name;
+        document.getElementById('target').innerText = data.target;
+        document.getElementById('attend').innerText = data.attend;
     } else {
-        alert("خطأ: تأكد من رقم الملف وكلمة المرور.");
-        location.reload();
+        alert("خطأ: تأكد من البيانات");
+        document.getElementById('loginBtn').innerText = "دخول";
     }
 }
 </script>
