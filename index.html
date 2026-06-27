@@ -2,107 +2,60 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>Employee Dashboard</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <title>لوحة تحكم الموظف</title>
     <style>
-        body { 
-            margin: 0; height: 100vh; display: flex; justify-content: center; align-items: center; 
-            background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=2070') center/cover; 
-            font-family: 'Cairo', sans-serif;
-        }
-        
-        .card { 
-            background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px);
-            padding: 40px; border-radius: 40px; width: 350px; text-align: center; 
-            box-shadow: 0 20px 50px rgba(0,0,0,0.3); transition: 0.5s;
-        }
-
-        input { 
-            width: 100%; padding: 18px; margin: 10px 0; background: #f0f0f0; 
-            border: 2px solid transparent; border-radius: 20px; text-align: center; 
-            font-size: 16px; box-sizing: border-box; transition: 0.3s;
-        }
-        input:focus { border: 2px solid #000; outline: none; }
-
-        button { 
-            width: 100%; padding: 18px; margin-top: 15px; background: #000; 
-            color: #fff; border: none; border-radius: 20px; font-weight: 700; cursor: pointer;
-        }
-        button:disabled { background: #666; cursor: wait; }
-
+        body { background: #0f172a; color: white; font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .card { background: #1e293b; padding: 30px; border-radius: 20px; width: 400px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); text-align: center; }
+        .input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid #334155; background: #0f172a; color: white; box-sizing: border-box; }
+        .btn { width: 100%; padding: 12px; background: #3b82f6; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
         #dashboard { display: none; }
-        .info-card { background: #000; color: #fff; padding: 25px; border-radius: 25px; margin: 20px 0; }
-        .data-row { display: flex; justify-content: space-between; align-items: center; margin: 15px 0; }
-        .label { color: #888; font-size: 12px; }
-        .value { font-size: 18px; font-weight: bold; }
+        .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
+        .stat-item { background: #334155; padding: 15px; border-radius: 12px; border: 1px solid #475569; }
+        .stat-item b { font-size: 1.2em; color: #38bdf8; }
     </style>
 </head>
 <body>
 
-<div class="card" id="loginArea">
-    <h2 style="margin-bottom: 25px;">تسجيل الدخول</h2>
-    <input type="text" id="user" placeholder="اسم المستخدم">
-    <input type="password" id="pass" placeholder="كلمة المرور">
-    <button id="loginBtn" onclick="login()">دخول إلى النظام</button>
+<div class="card" id="login">
+    <h2>تسجيل الدخول</h2>
+    <input type="text" id="u" class="input" placeholder="اسم المستخدم">
+    <input type="password" id="p" class="input" placeholder="كلمة المرور">
+    <button class="btn" onclick="login()">دخول إلى النظام</button>
 </div>
 
-<div id="dashboard" class="card">
-    <h2 style="margin-bottom: 5px;">لوحة البيانات</h2>
-    <p style="color: #666; margin-bottom: 20px;">أهلاً بك في نظام المتابعة</p>
+<div class="card" id="dashboard">
+    <h2 id="welcomeText">مرحباً بك</h2>
+    <p>إليك آخر التحديثات الخاصة ببياناتك:</p>
+    <small style="color: #94a3b8; display: block; margin-bottom: 15px;">
+        برجاء عدم مشاركة كلمة المرور مع أي شخص آخر لضمان سرية بياناتك.
+    </small>
     
-    <div class="info-card">
-        <div class="data-row">
-            <span class="value" id="resName">--</span>
-            <span class="label">الاسم 👤</span>
-        </div>
-        <div class="data-row">
-            <span class="value" id="resID">--</span>
-            <span class="label">رقم الملف 🆔</span>
-        </div>
-        <div class="data-row">
-            <span class="value" id="resTarget" style="color: #deff9a;">--</span>
-            <span class="label">التارجت 🎯</span>
-        </div>
+    <div class="stat-grid">
+        <div class="stat-item">أيام الحضور<br><b id="att">--</b></div>
+        <div class="stat-item">أيام الغياب<br><b id="abs">--</b></div>
+        <div class="stat-item">التارجت المحقق<br><b id="tar">--</b></div>
+        <div class="stat-item">الخصومات<br><b id="ded">--</b></div>
     </div>
-    
-    <button onclick="location.reload()" style="background:#f44336;">تسجيل خروج</button>
+    <button class="btn" style="margin-top:20px; background:#ef4444;" onclick="location.reload()">تسجيل خروج</button>
 </div>
 
 <script>
-// دعم زر Enter
-document.addEventListener("keypress", function(event) {
-    if (event.key === "Enter") login();
-});
-
 function login() {
-    const user = document.getElementById('user').value;
-    const pass = document.getElementById('pass').value;
-    const btn = document.getElementById('loginBtn');
-    
-    if(!user || !pass) return alert("يرجى إدخال البيانات كاملة");
-
-    btn.innerText = "جاري التحقق...";
-    btn.disabled = true;
-
-    const url = "https://script.google.com/macros/s/AKfycby0EllzsdlL31ffTdLyCE1uOf3Akxqrb_dwXbF7CRGjX50UrmjiqDVdCOm_lEQD3ZRo/exec";
+    const url = "https://script.google.com/macros/s/AKfycby0EllzsdlL31ffTdLyCE1uOf3Akxqrb_dwXbF7CRGjX50UrmjiqDVdCOm_lEQD3ZRo/exec"; // <--- ضع الرابط هنا
     const script = document.createElement('script');
-    script.src = `${url}?username=${user}&password=${pass}&callback=handleResponse`;
+    script.src = `${url}?username=${document.getElementById('u').value}&password=${document.getElementById('p').value}&callback=res`;
     document.body.appendChild(script);
 }
-
-function handleResponse(res) {
-    const btn = document.getElementById('loginBtn');
-    if (res.status === "success") {
-        document.getElementById('loginArea').style.display = 'none';
+function res(data) {
+    if(data.status == "success") {
+        document.getElementById('login').style.display = 'none';
         document.getElementById('dashboard').style.display = 'block';
-        document.getElementById('resName').innerText = res.name;
-        document.getElementById('resID').innerText = res.fileID;
-        document.getElementById('resTarget').innerText = res.target + "%";
-    } else {
-        alert("خطأ: بيانات الدخول غير صحيحة");
-        btn.innerText = "دخول إلى النظام";
-        btn.disabled = false;
-    }
+        document.getElementById('welcomeText').innerText = "مرحباً بك، " + data.name;
+        document.getElementById('att').innerText = data.attend;
+        document.getElementById('abs').innerText = data.absent;
+        document.getElementById('tar').innerText = data.target + "%";
+        document.getElementById('ded').innerText = data.deductions;
+    } else { alert("اسم المستخدم أو كلمة المرور غير صحيحة"); }
 }
 </script>
 </body>
