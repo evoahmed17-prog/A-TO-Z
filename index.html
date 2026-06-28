@@ -2,40 +2,50 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Employee Portal</title>
+    <title>Employee Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        body { margin: 0; height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; background: radial-gradient(circle, #2c3e50, #000); font-family: 'Cairo', sans-serif; overflow: hidden; }
-        .card { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); padding: 20px; border-radius: 30px; width: 90%; max-width: 400px; text-align: center; color: white; }
-        input { width: 100%; padding: 12px; margin: 8px 0; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: white; text-align: right; }
-        button { width: 100%; padding: 12px; margin-top: 8px; background: #fff; color: #000; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; }
-        .tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; margin: 15px 0; }
-        .tab-btn { padding: 8px; border: none; border-radius: 8px; background: rgba(255,255,255,0.1); color: white; font-size: 10px; cursor: pointer; }
+        body { margin: 0; height: 100vh; display: flex; justify-content: center; align-items: center; background: radial-gradient(circle, #2c3e50, #000); font-family: 'Cairo', sans-serif; overflow: hidden; }
+        .card { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); padding: 30px; border-radius: 30px; width: 450px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); color: white; transition: all 0.4s ease; }
+        h2 { color: #fff; margin-bottom: 20px; }
+        input { width: 100%; padding: 15px; margin: 10px 0; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; text-align: right; box-sizing: border-box; color: white; }
+        button { width: 100%; padding: 15px; margin-top: 10px; background: #fff; color: #000; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        
+        .progress-container { width: 100%; background: #333; border-radius: 10px; height: 10px; margin: 15px 0; overflow: hidden; }
+        .progress-bar { height: 100%; background: #00ffcc; width: 0%; transition: width 1.5s ease-in-out; }
+
+        .footer { position: fixed; bottom: 20px; width: 100%; text-align: center; color: rgba(255,255,255,0.5); font-size: 12px; }
+        
+        .tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 20px; }
+        .tab-btn { padding: 10px 5px; border: none; border-radius: 10px; background: rgba(255,255,255,0.1); color: white; cursor: pointer; font-size: 11px; transition: 0.3s; }
         .tab-btn.active { background: #fff; color: #000; }
-        #dataDisplay { padding: 15px; font-size: 16px; background: rgba(0,0,0,0.3); border-radius: 15px; color: #00ffcc; font-weight: bold; margin-bottom: 15px; }
-        #dashboard, #modal { display: none; }
-        #modal { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); justify-content:center; align-items:center; z-index:2000; }
+        
+        #dataDisplay { padding: 20px; font-size: 20px; background: rgba(0,0,0,0.3); border-radius: 15px; color: #00ffcc; font-weight: bold; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.1); }
+        .logout { background: #ff4757 !important; color: white !important; }
+        #dashboard { display: none; }
     </style>
 </head>
 <body>
 
-<div class="card" id="loginArea">
-    <h2>تسجيل الدخول</h2>
-    <input type="text" id="user" placeholder="اسم المستخدم">
-    <input type="password" id="pass" placeholder="كلمة المرور">
-    <button onclick="login()">دخول</button>
-    
-    <div style="margin-top: 20px; text-align: center; color: rgba(255,255,255,0.7); font-size: 13px; font-weight: bold;">
-        Create By: Ahmed Abdelfattah | 
-        <a href="https://wa.me/201050662535" style="color:#00ffcc; text-decoration:none;">WhatsApp: 01050662535</a>
+<div id="welcomeModal" style="display:flex; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); backdrop-filter:blur(10px); z-index:1000; justify-content:center; align-items:center;">
+    <div class="card">
+        <h2 style="color: #00ffcc;">أهلاً بك!</h2>
+        <p>بوابة الموظف المطورة. هذه نسخة تجريبية اذا كان لديك اي استفسار برجاء التوجه الي الاداره .</p>
+        <button onclick="document.getElementById('welcomeModal').style.display='none'">فهمت ذلك</button>
     </div>
+</div>
+
+<div class="card" id="loginArea">
+    <h2>تسجيل دخول الموظفين</h2>
+    <input type="text" id="user" placeholder="اسم المستخدم">
+    <input type="password" id="pass" placeholder="كلمة المرور" onkeypress="if(event.key==='Enter') login()">
+    <button onclick="login()">دخول</button>
 </div>
 
 <div id="dashboard" class="card">
     <h2 id="userNameDisplay">--</h2>
-    <div style="font-size: 14px; margin-bottom: 5px;">صافي المرتب: <span id="netSalary" style="color:#00ffcc; font-weight:bold;">0</span> جنيه</div>
-    <div style="font-size: 12px; margin-bottom: 15px;">🎯 التارجت: <span id="targetText">0</span>%</div>
+    <div style="margin-bottom: 5px;">نسبة التارجت: <span id="resTarget">0</span>%</div>
+    <div class="progress-container"><div id="progBar" class="progress-bar"></div></div>
     
     <div class="tabs">
         <button class="tab-btn active" id="btn1" onclick="showData('attendance', 'btn1')">الحضور</button>
@@ -44,78 +54,53 @@
         <button class="tab-btn" id="btn4" onclick="showData('allowance', 'btn4')">بدل طبيعة</button>
         <button class="tab-btn" id="btn5" onclick="showData('adminPenalty', 'btn5')">خصم إداري</button>
         <button class="tab-btn" id="btn6" onclick="showData('bonuses', 'btn6')">المكافآت</button>
-        <button class="tab-btn" id="btn7" onclick="showData('سلف', 'btn7')">السلف</button>
-        <button class="tab-btn" id="btn8" onclick="showData('بدل العارضة', 'btn8')">بدل العارضة</button>
     </div>
     <div id="dataDisplay">--</div>
-    
-    <div style="display:flex; gap:5px;">
-        <button style="background:#00ffcc;" onclick="showDetails()">الحسبة</button>
-        <button style="background:#ff4757; color:white;" onclick="location.reload()">تسجيل خروج</button>
-    </div>
+    <button class="logout" onclick="location.reload()">تسجيل خروج</button>
 </div>
 
-<div id="modal">
-    <div class="card">
-        <h3>تفاصيل الحسبة</h3>
-        <div id="detailsText" style="text-align: right; font-size: 14px; margin: 15px 0;"></div>
-        <button onclick="document.getElementById('modal').style.display='none'">إغلاق</button>
-    </div>
+<div class="footer">
+    Create By: Ahmed Abdelfattah | 
+    <a href="https://wa.me/201050662535" style="color: #00ffcc; text-decoration: none;">
+        WhatsApp: 01050662535
+    </a>
 </div>
 
 <script>
-    window.onload = function() { alert("أهلاً بك في نظام الموظفين"); };
-    
-    let userData = {}; let currentDetails = {}; const basic = 5500;
-    function login() {
-        const user = document.getElementById('user').value; const pass = document.getElementById('pass').value;
-        const script = document.createElement('script');
-        script.src = `https://script.google.com/macros/s/AKfycby0EllzsdlL31ffTdLyCE1uOf3Akxqrb_dwXbF7CRGjX50UrmjiqDVdCOm_lEQD3ZRo/exec?username=${user}&password=${pass}&callback=handleResponse`;
-        document.body.appendChild(script);
-    }
+let userData = {};
+const scriptUrl = "https://script.google.com/macros/s/AKfycby0EllzsdlL31ffTdLyCE1uOf3Akxqrb_dwXbF7CRGjX50UrmjiqDVdCOm_lEQD3ZRo/exec";
 
-    function handleResponse(res) {
-        if (res.status === "success") {
-            userData = res; document.getElementById('loginArea').style.display = 'none'; document.getElementById('dashboard').style.display = 'block';
-            document.getElementById('userNameDisplay').innerText = res.name; document.getElementById('targetText').innerText = res.target;
-            
-            let dayValue = basic / 30; let targetVal = (res.target / 100) * 1000;
-            let bonus = getBonus(res.target); let deduction = ((parseInt(res.absence)||0) + (parseInt(res.adminPenalty)||0)) * dayValue;
-            let loans = parseInt(res.سلف) || 0;
-            let araDaReward = (parseInt(res.absence) === 0) ? (2 * dayValue) : 0;
-            let net = (basic + targetVal + bonus + (parseInt(res.allowance)||0) + araDaReward) - deduction - loans;
-            
-            document.getElementById('netSalary').innerText = Math.round(net);
-            currentDetails = { basic, targetVal, bonus, allowance: res.allowance, deduction: Math.round(deduction), loans, araDaReward: Math.round(araDaReward) };
-            showData('attendance', 'btn1');
-        } else { alert("خطأ في البيانات"); }
-    }
+function login() {
+    const user = document.getElementById('user').value;
+    const pass = document.getElementById('pass').value;
+    const script = document.createElement('script');
+    script.src = `${scriptUrl}?username=${user}&password=${pass}&callback=handleResponse`;
+    document.body.appendChild(script);
+}
 
-    function getBonus(target) {
-        if(target >= 226) return 4940; if(target >= 221) return 4640; if(target >= 216) return 4340;
-        if(target >= 211) return 4040; if(target >= 206) return 3740; if(target >= 201) return 3440;
-        if(target >= 196) return 3140; if(target >= 191) return 2870; if(target >= 186) return 2600;
-        if(target >= 181) return 2360; if(target >= 176) return 2120; if(target >= 171) return 1910;
-        if(target >= 166) return 1700; if(target >= 161) return 1525; if(target >= 156) return 1350;
-        if(target >= 151) return 1200; if(target >= 146) return 1050; if(target >= 141) return 925;
-        if(target >= 136) return 800; if(target >= 131) return 700; return 0;
-    }
+function handleResponse(res) {
+    if (res.status === "success") {
+        userData = res;
+        document.getElementById('loginArea').style.display = 'none';
+        document.getElementById('dashboard').style.display = 'block';
+        document.getElementById('userNameDisplay').innerText = res.name;
+        document.getElementById('resTarget').innerText = res.target;
+        document.getElementById('progBar').style.width = res.target + "%";
+        showData('attendance', 'btn1');
+    } else { alert("بيانات الدخول غير صحيحة"); }
+}
 
-    function showData(type, btnId) {
-        const labels = { attendance: "أيام الحضور", absence: "أيام الغياب", deduction: "الخصومات", allowance: "بدل طبيعة العمل", adminPenalty: "خصم إداري", bonuses: "المكافآت", "سلف": "السلف", "بدل العارضة": "بدل العارضة" };
-        let val = userData[type];
-        let displayVal = "";
-        if(type === 'بدل العارضة') displayVal = (userData.absence == 0) ? "مستحق (يومان مكافأة)" : "غير مستحق (بسبب الغياب)";
-        else displayVal = (val === "" || val === 0 || val === null) ? "لا يوجد" : val + (type === 'allowance' || type === 'سلف' ? " جنيه" : " يوم");
-        document.getElementById('dataDisplay').innerText = labels[type] + ": " + displayVal;
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        document.getElementById(btnId).classList.add('active');
-    }
-
-    function showDetails() {
-        document.getElementById('detailsText').innerHTML = `الأساسي: ${currentDetails.basic} ج.م<br>التارجت: ${Math.round(currentDetails.targetVal)} ج.م<br>الحافز: ${currentDetails.bonus} ج.م<br>بدل طبيعة: ${currentDetails.allowance || 0} ج.م<br>بدل العارضة: +${currentDetails.araDaReward} ج.م<br>الخصومات: -${currentDetails.deduction} ج.م<br>السلف: -${currentDetails.loans} ج.م`;
-        document.getElementById('modal').style.display = 'flex';
-    }
+function showData(type, btnId) {
+    const labels = { 
+        attendance: "أيام الحضور", absence: "أيام الغياب", deduction: "أيام الخصم", 
+        allowance: "بدل طبيعة العمل", adminPenalty: "أيام خصم إداري", bonuses: "أيام المكافأة" 
+    };
+    let val = userData[type] || 0;
+    val = (type === 'allowance') ? val + " جنيه" : val + " يوم";
+    document.getElementById('dataDisplay').innerText = labels[type] + ": " + val;
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(btnId).classList.add('active');
+}
 </script>
 </body>
 </html>
