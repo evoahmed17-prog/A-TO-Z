@@ -21,10 +21,16 @@
 <body>
 
 <div class="card" id="loginArea">
-    <h2>تسجيل الدخول</h2>
+    <h2>اهلا بك</h2>
     <input type="text" id="user" placeholder="اسم المستخدم">
     <input type="password" id="pass" placeholder="كلمة المرور">
     <button onclick="login()">دخول</button>
+    
+    <!-- التذييل المنسق -->
+    <div style="margin-top: 20px; text-align: center; color: rgba(255,255,255,0.7); font-size: 13px; font-weight: bold;">
+        Create By: Ahmed Abdelfattah | 
+        <a href="https://wa.me/201050662535" style="color:#00ffcc; text-decoration:none;">WhatsApp: 01050662535</a>
+    </div>
 </div>
 
 <div id="dashboard" class="card">
@@ -58,12 +64,15 @@
     </div>
 </div>
 
-<div style="margin-top: 20px; text-align: center; color: rgba(255,255,255,0.5); font-size: 12px;">
-    Create By: Ahmed Abdelfattah | <a href="https://wa.me/201050662535" style="color:#00ffcc; text-decoration:none;">WhatsApp: 01050662535</a>
+<script>
+  <div id="welcomeModal" style="display:flex; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); backdrop-filter:blur(10px); z-index:1000; justify-content:center; align-items:center;">
+    <div class="card">
+        <h2 style="color: #00ffcc;">أهلاً بك!</h2>
+        <p>بوابة الموظف المطورة. هذه نسخة تجريبية اذا كان لديك اي استفسار برجاء التوجه الي الاداره .</p>
+        <button onclick="document.getElementById('welcomeModal').style.display='none'">فهمت ذلك</button>
+    </div>
 </div>
 
-<script>
-    window.onload = function() { alert("أهلاً بك في نظام الموظفين"); };
     
     let userData = {}; let currentDetails = {}; const basic = 5500;
     function login() {
