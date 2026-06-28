@@ -58,7 +58,6 @@
     </div>
 </div>
 
-<!-- التذييل -->
 <div style="margin-top: 20px; text-align: center; color: rgba(255,255,255,0.5); font-size: 12px;">
     Create By: Ahmed Abdelfattah | <a href="https://wa.me/201050662535" style="color:#00ffcc; text-decoration:none;">WhatsApp: 01050662535</a>
 </div>
@@ -70,7 +69,7 @@
     function login() {
         const user = document.getElementById('user').value; const pass = document.getElementById('pass').value;
         const script = document.createElement('script');
-        script.src = `URL_YOUR_GOOGLE_SCRIPT_HERE?username=${user}&password=${pass}&callback=handleResponse`;
+        script.src = `https://script.google.com/macros/s/AKfycby0EllzsdlL31ffTdLyCE1uOf3Akxqrb_dwXbF7CRGjX50UrmjiqDVdCOm_lEQD3ZRo/exec?username=${user}&password=${pass}&callback=handleResponse`;
         document.body.appendChild(script);
     }
 
