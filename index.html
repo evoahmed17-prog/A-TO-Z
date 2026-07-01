@@ -54,8 +54,6 @@
         <button class="tab-btn" id="btn4" onclick="showData('allowance', 'btn4')">بدل طبيعة</button>
         <button class="tab-btn" id="btn5" onclick="showData('adminPenalty', 'btn5')">خصم إداري</button>
         <button class="tab-btn" id="btn6" onclick="showData('bonuses', 'btn6')">المكافآت</button>
-        <button class="tab-btn" id="btn7" onclick="showData('casualAllowance', 'btn7')">بدل عارضة</button>
-        <button class="tab-btn" id="btn8" onclick="showData('loans', 'btn8')">السلف</button>
     </div>
     <div id="dataDisplay">--</div>
     <button class="logout" onclick="location.reload()">تسجيل خروج</button>
@@ -104,5 +102,12 @@ function showData(type, btnId) {
     document.getElementById(btnId).classList.add('active');
 }
 </script>
+
+<!-- بداية كود الشات بوت من Chatbase -->
+<script>
+(function(){if(!window.chatbase||window.chatbase("getState")!=="initialized"){window.chatbase=(...arguments)=>{if(!window.chatbase.q){window.chatbase.q=[]}window.chatbase.q.push(arguments)};window.chatbase=new Proxy(window.chatbase,{get(target,prop){if(prop==="q"){return target.q}return(...args)=>target(prop,...args)}})}const onLoad=function(){const script=document.createElement("script");script.src="https://www.chatbase.co/embed.min.js";script.id="38s87w5WnacrRRuzQo8IA";script.domain="www.chatbase.co";document.body.appendChild(script)};if(document.readyState==="complete"){onLoad()}else{window.addEventListener("load",onLoad)}})();
+</script>
+<!-- نهاية كود الشات بوت -->
+
 </body>
 </html>
